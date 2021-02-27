@@ -21,6 +21,6 @@ package tcell
 // that would probably mean sacrificing some of the richer key reporting
 // that we can obtain with the console API present on Windows.
 
-func (t *tScreen) initialize() error {
+func (t tScreen) initialize() error {
 	return ErrNoScreen
 }

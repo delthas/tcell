@@ -133,10 +133,10 @@ func (tty *stdIoTty) Stop() error {
 	return nil
 }
 
-func (tty *stdIoTty) WindowSize() (int, int, error) {
+func (tty *stdIoTty) WindowSize() (int, int, int, int, error) {
 	w, h, err := term.GetSize(tty.fd)
 	if err != nil {
-		return 0, 0, err
+		return 0, 0, 0, 0, err
 	}
 	if w == 0 {
 		w, _ = strconv.Atoi(os.Getenv("COLUMNS"))
@@ -150,7 +150,7 @@ func (tty *stdIoTty) WindowSize() (int, int, error) {
 	if h == 0 {
 		h = 25 // default
 	}
-	return w, h, nil
+	return w, h, 0, 0, nil
 }
 
 func (tty *stdIoTty) NotifyResize(cb func()) {

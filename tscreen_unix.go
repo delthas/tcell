@@ -20,7 +20,7 @@ package tcell
 // initialize is used at application startup, and sets up the initial values
 // including file descriptors used for terminals and saving the initial state
 // so that it can be restored when the application terminates.
-func (t *tScreen) initialize() error {
+func (t tScreen) initialize() error {
 	var err error
 	if t.tty == nil {
 		t.tty, err = NewDevTty()
