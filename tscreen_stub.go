@@ -1,4 +1,4 @@
-// +build js plan9 windows
+// +build js plan9
 
 // Copyright 2021 The TCell Authors
 //

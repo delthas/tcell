@@ -1,6 +1,4 @@
-// +build tcell_minimal nacl js zos plan9 android
-
-// Copyright 2019 The TCell Authors
+// Copyright 2021 The TCell Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use file except in compliance with the License.
@@ -14,14 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// +build windows
+
 package tcell
 
-import (
-	"errors"
-
-	"github.com/gdamore/tcell/v2/terminfo"
-)
-
-func loadDynamicTerminfo(_ string) (*terminfo.Terminfo, error) {
-	return nil, errors.New("terminal type unsupported")
+// initialize is used at application startup, and sets up the initial values
+// including file descriptors used for terminals and saving the initial state
+// so that it can be restored when the application terminates.
+func (t *tScreen) initialize() error {
+	var err error
+	if t.tty == nil {
+		t.tty, err = NewConPty()
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }

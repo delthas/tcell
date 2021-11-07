@@ -14,6 +14,11 @@
 
 package tcell
 
+import (
+	"os"
+	"runtime"
+)
+
 // Screen represents the physical (or emulated) screen.
 // This can be a terminal window or a physical console.  Platforms implement
 // this differently.
@@ -239,6 +244,13 @@ type Screen interface {
 // NewScreen returns a default Screen suitable for the user's terminal
 // environment.
 func NewScreen() (Screen, error) {
+	// If on Windows and the Windows Terminal session env var is set, try spawning a Windows Terminfo screen first
+	if runtime.GOOS == "windows" && os.Getenv("WT_SESSION") != "" {
+		if s, _ := NewTerminfoScreen(); s != nil {
+			return s, nil
+		}
+	}
+
 	// Windows is happier if we try for a console screen first.
 	if s, _ := NewConsoleScreen(); s != nil {
 		return s, nil
