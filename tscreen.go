@@ -1143,10 +1143,10 @@ func (t tScreen) resize(dispatch bool) {
 	if w == t.w && h == t.h && xpx == t.xpx && ypx == t.ypx {
 		return
 	}
-	w = t.w
-	h = t.h
-	xpx = t.xpx
-	ypx = t.ypx
+	t.w = w
+	t.h = h
+	t.xpx = xpx
+	t.ypx = ypx
 
 	t.cx = -1
 	t.cy = -1
@@ -1896,8 +1896,10 @@ func (t *tScreen) engage() error {
 		return err
 	}
 	t.running = true
-	if w, h, _, _, err := t.tty.WindowSize(); err == nil && w != 0 && h != 0 {
+	if w, h, xpx, ypx, err := t.tty.WindowSize(); err == nil && w != 0 && h != 0 {
 		t.cells.Resize(w, h)
+		t.xpx = xpx
+		t.ypx = ypx
 	}
 	stopQ := make(chan struct{})
 	t.stopQ = stopQ

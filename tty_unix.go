@@ -140,18 +140,14 @@ func (tty *devTty) Stop() error {
 
 func (tty *devTty) WindowSize() (int, int, int, int, error) {
 	winsz, err := unix.IoctlGetWinsize(tty.fd, unix.TIOCGWINSZ)
-	if err == nil {
-		h := int(winsz.Row)
-		w := int(winsz.Col)
-		xpx := int(winsz.Xpixel)
-		ypx := int(winsz.Ypixel)
-		return w, h, xpx, ypx, nil
-	}
-
-	w, h, err := term.GetSize(tty.fd)
 	if err != nil {
 		return 0, 0, 0, 0, err
 	}
+	w := int(winsz.Col)
+	h := int(winsz.Row)
+	xpx := int(winsz.Xpixel)
+	ypx := int(winsz.Ypixel)
+
 	if w == 0 {
 		w, _ = strconv.Atoi(os.Getenv("COLUMNS"))
 	}
@@ -164,7 +160,7 @@ func (tty *devTty) WindowSize() (int, int, int, int, error) {
 	if h == 0 {
 		h = 25 // default
 	}
-	return w, h, 0, 0, nil
+	return w, h, xpx, ypx, nil
 }
 
 func (tty *devTty) NotifyResize(cb func()) {
