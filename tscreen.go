@@ -53,13 +53,14 @@ func NewTerminfoScreen() (Screen, error) {
 // LookupTerminfo attempts to find a definition for the named $TERM falling
 // back to attempting to parse the output from infocmp.
 func LookupTerminfo(name string) (ti *terminfo.Terminfo, e error) {
-	ti, e = terminfo.LookupTerminfo(name)
-	if e != nil {
-		ti, e = loadDynamicTerminfo(name)
+	ti, e = loadDynamicTerminfo(name)
+	if e == nil {
+		terminfo.AddTerminfo(ti)
+	} else {
+		ti, e = terminfo.LookupTerminfo(name)
 		if e != nil {
 			return nil, e
 		}
-		terminfo.AddTerminfo(ti)
 	}
 
 	return
