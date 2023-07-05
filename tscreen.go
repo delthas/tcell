@@ -154,6 +154,7 @@ type tScreen struct {
 	disablePaste string
 	enterUrl     string
 	exitUrl      string
+	notification string
 	setWinSize   string
 	cursorStyles map[CursorStyle]string
 	cursorStyle  CursorStyle
@@ -348,8 +349,8 @@ func (t *tScreen) prepareBracketedPaste() {
 func (t *tScreen) prepareExtendedOSC() {
 	// Linux is a special beast - because it has a mouse entry, but does
 	// not swallow these OSC commands properly.
-	if (strings.Contains(t.ti.Name, "linux")) {
-		return;
+	if strings.Contains(t.ti.Name, "linux") {
+		return
 	}
 	// More stuff for limits in terminfo.  This time we are applying
 	// the most common OSC (operating system commands).  Generally
@@ -367,6 +368,10 @@ func (t *tScreen) prepareExtendedOSC() {
 		t.setWinSize = t.ti.SetWindowSize
 	} else if t.ti.Mouse != "" {
 		t.setWinSize = "\x1b[8;%p1%p2%d;%dt"
+	}
+
+	if t.ti.Mouse != "" {
+		t.notification = "\x1b]777;notify;%p1%s;%p2%s\a"
 	}
 }
 
@@ -1756,6 +1761,15 @@ func (t *tScreen) HasKey(k Key) bool {
 		return true
 	}
 	return t.keyexist[k]
+}
+
+func (t *tScreen) Notify(title string, body string) bool {
+	if t.notification == "" {
+		return false
+	}
+	ti := t.ti
+	t.TPuts(ti.TParm(t.notification, title, body))
+	return true
 }
 
 func (t *tScreen) SetSize(w, h int) {

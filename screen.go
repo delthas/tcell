@@ -241,6 +241,13 @@ type Screen interface {
 	// when unsuccessful.
 	Beep() error
 
+	// Notify attempts to send a desktop notification with the given notification
+	// title and body.
+	//
+	// Many terminals cannot support this. Most terminals also drop the notification
+	// if the terminal window is currently focused.
+	Notify(title string, body string) bool
+
 	// SetSize attempts to resize the window.  It also invalidates the cells and
 	// calls the resize function.  Note that if the window size is changed, it will
 	// not be restored upon application exit.

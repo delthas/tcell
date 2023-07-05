@@ -463,6 +463,10 @@ func (s *simscreen) CharacterSet() string {
 	return s.charset
 }
 
+func (s *simscreen) Notify(title string, body string) bool {
+	return false
+}
+
 func (s *simscreen) SetSize(w, h int) {
 	s.Lock()
 	newc := make([]SimCell, w*h)

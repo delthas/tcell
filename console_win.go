@@ -1100,6 +1100,10 @@ func (s *cScreen) Size() (int, int) {
 	return w, h
 }
 
+func (s *cScreen) Notify(title string, body string) bool {
+	return false
+}
+
 func (s *cScreen) SetSize(w, h int) {
 	xy, _, _ := procGetLargestConsoleWindowSize.Call(uintptr(s.out))
 
