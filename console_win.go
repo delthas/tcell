@@ -1104,6 +1104,10 @@ func (s *cScreen) Notify(title string, body string) bool {
 	return false
 }
 
+func (s *cScreen) SetAppID(appID string) bool {
+	return false
+}
+
 func (s *cScreen) SetSize(w, h int) {
 	xy, _, _ := procGetLargestConsoleWindowSize.Call(uintptr(s.out))
 

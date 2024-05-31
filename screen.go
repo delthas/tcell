@@ -248,6 +248,10 @@ type Screen interface {
 	// if the terminal window is currently focused.
 	Notify(title string, body string) bool
 
+	// SetAppID attempts to set the X Window Class / Wayland Application ID of the
+	// terminal window. Many terminals do not support this.
+	SetAppID(appID string) bool
+
 	// SetSize attempts to resize the window.  It also invalidates the cells and
 	// calls the resize function.  Note that if the window size is changed, it will
 	// not be restored upon application exit.

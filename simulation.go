@@ -467,6 +467,10 @@ func (s *simscreen) Notify(title string, body string) bool {
 	return false
 }
 
+func (s *simscreen) SetAppID(appID string) bool {
+	return false
+}
+
 func (s *simscreen) SetSize(w, h int) {
 	s.Lock()
 	newc := make([]SimCell, w*h)

@@ -155,6 +155,7 @@ type tScreen struct {
 	enterUrl     string
 	exitUrl      string
 	notification string
+	appID        string
 	setWinSize   string
 	cursorStyles map[CursorStyle]string
 	cursorStyle  CursorStyle
@@ -372,6 +373,7 @@ func (t *tScreen) prepareExtendedOSC() {
 
 	if t.ti.Mouse != "" {
 		t.notification = "\x1b]777;notify;%p1%s;%p2%s\a"
+		t.appID = "\x1b]176;%p1%s\a"
 	}
 }
 
@@ -1769,6 +1771,15 @@ func (t *tScreen) Notify(title string, body string) bool {
 	}
 	ti := t.ti
 	t.TPuts(ti.TParm(t.notification, title, body))
+	return true
+}
+
+func (t *tScreen) SetAppID(appID string) bool {
+	if t.appID == "" {
+		return false
+	}
+	ti := t.ti
+	t.TPuts(ti.TParm(t.appID, appID))
 	return true
 }
 
